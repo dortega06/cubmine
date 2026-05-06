@@ -6,7 +6,7 @@
 /*   By: dortega- <dortega-@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 17:05:19 by dortega-          #+#    #+#             */
-/*   Updated: 2026/04/01 19:09:35 by dortega-         ###   ########.fr       */
+/*   Updated: 2026/05/02 19:45:03 by dortega-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@
 # define D 100
 # define LEFT 65361
 # define RIGHT 65363
-
+# define ESC 65307
 # define PI 3.1415926535
 
+#define CEILING_COLOR 0xADD8E6
+#define FLOOR_COLOR 0xFFFDD0
 /********************************[ libs ]**************************************/
 
 # include "../mlx/mlx.h"
@@ -37,6 +39,27 @@
 #include <math.h>
 #include <string.h>
 /*******************************[ structs ]************************************/
+
+// datos de las texturas
+typedef struct s_img
+{
+	void	*img_ptr;
+	char	*addr;
+	int		bpp;
+	int		size_line;
+	int		endian;
+	int		width;
+	int		height;
+}	t_img;
+
+// paths de las texturas
+typedef struct s_textures
+{
+	char	*north;
+	char	*south;
+	char	*west;
+	char	*east;
+}	t_textures;
 
 typedef struct s_player
 {
@@ -66,13 +89,44 @@ typedef struct s_game
 	t_player	player;
 
 	char **map;
+	int			map_height;
+
+	int			last_facing;
+	// TEXTURAS
+	t_textures	textures;		// Paths de texturas
+	t_img		*texture_imgs;	// Array de imágenes cargadas
+	int			textures_loaded;
+	
 }	t_game;
 
 /*******************************[ ft ]************************************/
 
 void	init_player(t_player *player);
-int key_realese(int keycode, t_player *player);
-int key_press(int keycode, t_player *player);
+int key_realese(int keycode, t_game *game);
+int key_press(int keycode, t_game *game);
 void    move_player(t_player *player);
+double distance(double dx, double dy);
+void    clear_img(t_game *game);
+bool touch(double px, double py, t_game *game);
+double	fixed_distance(double x1, double y1, double x2, double y2, t_game *game);
+int	close_game(t_game *game);
+/*******************************[ render ]*********************************/
+int	draw_loop(t_game *game);
+void	draw_map(t_game *game);
+void	draw_square(int x, int y, int size, int color, t_game *game);
+void	put_pixel(int x, int y, int color, t_game *game);
+void	draw_line(t_player *player, t_game *game, float start_x, int i);
+void	draw_ceiling_and_floor(t_game *game);
+
+/*******************************[ textures ]******************************/
+void	init_textures(t_game *game);
+void	load_texture(t_game *game, int index, char *path);
+int		get_texture_color(t_img *texture, int x, int y);
+void	free_textures(t_game *game);
+
+/*******************************[ calculate_texture ]*******************/
+int		get_texture_x(double ray_x, double ray_y, int texture_width, int facing);
+int		get_texture_y(int screen_y, int wall_height, int texture_height);
+t_img	*get_wall_texture(t_game *game);
 
 #endif

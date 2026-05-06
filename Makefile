@@ -6,12 +6,12 @@
 #    By: mcuenca- <mcuenca-@student.42barcelon      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/23 16:46:01 by mcuenca-          #+#    #+#              #
-#    Updated: 2026/03/31 13:46:02 by dortega-         ###   ########.fr        #
+#    Updated: 2026/05/02 18:13:26 by dortega-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC= cc
-CFLAGS= -Wall -Wextra -Werror -Iincludes -Isrcs -Ilibft -Iminilibx-linux -g
+CFLAGS= -Wall -Wextra -Werror -Iincludes -Isrcs -Ilibft -Iminilibx-linux -g -no-pie
 
 LIBFT_DIR=libft
 LIBFT= libft/libft.a
@@ -24,7 +24,11 @@ HEAD=inc/cub.h
 SRCS_DIR= srcs
 SRCS= \
 	srcs/executer/main.c \
-	srcs/executer/moves.c
+	srcs/executer/moves.c \
+	srcs/executer/render.c \
+	srcs/executer/texture_utils.c \
+	srcs/executer/calculate_texture.c \
+	srcs/executer/events.c
 
 OBJS_DIR= objs
 OBJS= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
